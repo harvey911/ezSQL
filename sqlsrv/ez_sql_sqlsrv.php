@@ -214,8 +214,10 @@
 			$is_insert = false;
 			if ( preg_match("/^(insert|delete|update|replace)\s+/i",$query) )
 			{
-				$this->rows_affected = @sqlsrv_rows_affected($this->dbh);
-
+				//$this->rows_affected = @sqlsrv_rows_affected($this->dbh);
+				//Fixed by Bergkamp123
+				$this->rows_affected = @sqlsrv_rows_affected($this->result);
+				
 				// Take note of the insert_id
 				if ( preg_match("/^(insert|replace)\s+/i",$query) )
 				{
@@ -225,7 +227,9 @@
 					if ($identityresultset != false )
 					{
 						$identityrow = @sqlsrv_fetch($identityresultset);
-						$this->insert_id = $identityrow[0];
+						//$this->insert_id = $identityrow[0];
+						//Fixed by Bergkamp123
+						$this->insert_id = sqlsrv_get_field( $identityresultset, 0);;
 					}
 
 				}
